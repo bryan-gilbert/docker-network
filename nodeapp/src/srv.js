@@ -2,13 +2,15 @@
 const http = require('http');
 
 const hostname = process.env.HOST;
+const port = process.env.PORT;
+
 const otherhost = process.env.OTHERHOST
-const port = 3000;
+const otherport = process.env.OTHERPORT
 
 const server = http.createServer((req, res) => {
   res.statusCode = 200;
   res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
+  res.end('Hello from ' + hostname + '\n');
 });
 
 // set up a listening service
@@ -21,17 +23,23 @@ function sendToOther() {
 
   const options = {
     hostname: otherhost,
-    port: port,
+    port: otherport,
     path: '/',
-    method: 'GET'
+    method: 'GET',
+    headers: {
+      'Accept-Charset': 'utf-8',
+    }
   }
-
   const req = http.request(options, res => {
     console.log(`statusCode: ${res.statusCode}`)
-
-    res.on('data', d => {
-      console.log('RCV:', d)
-    })
+    res.setEncoding('utf8');
+    var data = "";
+    res.on('data', function (chunk) {
+      data += chunk;
+    });
+    res.on("end", function () {
+      console.log('RCV (' + hostname + '):', data);
+    });
   })
 
   req.on('error', error => {

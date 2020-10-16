@@ -6,11 +6,19 @@ services:
       dockerfile: Dockerfile
     environment:
       - HOST=nodeapp1
+      - PORT=3001
       - OTHERHOST=nodeapp2
+      - OTHERPORT=3002
+    ports:
+      - 3001:3001
   nodeapp2:
     build:
       context: ./nodeapp
       dockerfile: Dockerfile
     environment:
       - HOST=nodeapp2
+      - PORT=3002
       - OTHERHOST=nodeapp1
+      - OTHERPORT=3001
+    ports:
+      - 3002:3002
