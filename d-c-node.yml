@@ -1,0 +1,16 @@
+version: '3'
+services:
+  nodeapp1:
+    build:
+      context: ./nodeapp
+      dockerfile: Dockerfile
+    environment:
+      - HOST=nodeapp1
+      - OTHERHOST=nodeapp2
+  nodeapp2:
+    build:
+      context: ./nodeapp
+      dockerfile: Dockerfile
+    environment:
+      - HOST=nodeapp2
+      - OTHERHOST=nodeapp1
